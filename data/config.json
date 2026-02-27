@@ -1,0 +1,23 @@
+{
+  "rows": 10,
+  "cols": 10,
+  "colorCount": 5,
+  "boardRegenerateLimit": 30,
+  "inputModeDefault": "oneTap",
+  "scoring": {
+    "baseMultiplier": 10,
+    "bonusPerRemovedRemainder": 5,
+    "minGroupSize": 2
+  },
+  "animation": {
+    "clearMs": 220,
+    "moveMs": 260
+  },
+  "palette": [
+    "#F87060",
+    "#F9C74F",
+    "#90BE6D",
+    "#43AA8B",
+    "#577590"
+  ]
+}

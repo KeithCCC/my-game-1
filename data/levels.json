@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Stage 1", "targetScore": 1200 },
+  { "id": 2, "name": "Stage 2", "targetScore": 2200 },
+  { "id": 3, "name": "Stage 3", "targetScore": 3400 },
+  { "id": 4, "name": "Stage 4", "targetScore": 4700 },
+  { "id": 5, "name": "Stage 5", "targetScore": 6100 }
+]
