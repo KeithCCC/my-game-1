@@ -1,75 +1,45 @@
-# Chromatic Clusters (Expo / React Native)
+# 定時サバイバー
 
-Original tap-to-clear puzzle game inspired by the same general mechanics as Popstar-style games.
-This project intentionally uses original UI, palette, wording, and effects.
+日本の起業文化を軽くパロディにした、Vampire Survivors風の2Dブラウザゲームです。
+プレイヤーは若手社員として、資金調達前のピッチ資料修正、壁打ち、投資家質問、深夜通知をかわしながら定時まで生き延びます。
 
 ## Tech Stack
 
-- Expo SDK 55
-- React Native + TypeScript
-- expo-router
-- @shopify/react-native-skia
-- useReducer + Context
-- AsyncStorage
-- Jest (core logic unit tests)
-
-## Install
-
-```bash
-npm install
-```
+- TypeScript
+- Phaser 3
+- Vite
+- Jest + ts-jest
 
 ## Run
 
 ```bash
-npm run start
-npm run android
-npm run ios
-npm run web
+npm install
+npm run dev
 ```
+
+ブラウザで表示されたURLを開きます。
+
+短縮確認用の60秒モードは、URLに `?debug=1` を付けます。
 
 ## Test
 
 ```bash
 npm test
+npm run build
 ```
 
-## Project Structure
+## Gameplay
 
-- `src/core/*`: pure TypeScript game logic
-- `src/components/BoardCanvasSkia.tsx`: board renderer + tap mapping
-- `app/*`: screens and routing
-- `data/config.json`: gameplay constants, scoring, animation timing, palette
-- `data/levels.json`: stage target scores
-- `__tests__/core/*.test.ts`: unit tests for board logic
+- 移動: `WASD` または矢印キー
+- 攻撃: 完全自動
+- クリア: 5分間生存して定時退社
+- 敗北: HPが0になる
+- レベルアップ: 経験値を集めるとビジネス用語スキルを3択で選択
 
-## Configurable Parameters
+## Initial Weapons
 
-`data/config.json`
-- board size (`rows`, `cols`)
-- color count (`colorCount`)
-- regeneration attempts (`boardRegenerateLimit`)
-- scoring coefficients (`baseMultiplier`, `bonusPerRemovedRemainder`, `minGroupSize`)
-- animation timing (`clearMs`, `moveMs`)
-- default input mode (`inputModeDefault`)
-- palette colors (`palette`)
-
-`data/levels.json`
-- stage id / name / target score
-
-## Gameplay Notes
-
-- Valid tap: connected group of at least 2 cells (4-direction adjacency).
-- Clear flow: clear group -> gravity drop -> empty-column shift-left.
-- Game end: no valid group remains.
-- Clear bonus: `max(0, maxCells - remainder) * bonusPerRemovedRemainder`.
-- Input mode can be switched in Settings (`oneTap` or `confirmTap`).
-
-## Dependencies Added
-
-- `expo-router`
-- `react-native-safe-area-context`
-- `react-native-screens`
-- `@react-native-async-storage/async-storage`
-- `@shopify/react-native-skia`
-- `jest`, `jest-expo`, `@types/jest`, `ts-jest`
+- 議事録ビーム
+- 根回しオーラ
+- リマインド弾
+- 資料修正スプリント
+- 合意形成シールド
