@@ -1,10 +1,13 @@
 import Phaser from 'phaser';
+import playerSheetUrl from '../../assets/player-characters.png';
+
+type PlayerGender = 'male' | 'female';
 
 const CHARACTER_ROWS = [
   {
     name: '若手社員',
     role: 'プレイヤー',
-    description: '資金調達前の混乱に巻き込まれた主人公。',
+    description: '開始時に男の子か女の子を選ぶ主人公。',
     behavior: 'WASD / 矢印キーで移動し、自動攻撃で定時まで生存する。',
   },
   {
@@ -41,6 +44,7 @@ const CHARACTER_ROWS = [
 
 export class MenuScene extends Phaser.Scene {
   private root?: HTMLDivElement;
+  private selectedGender: PlayerGender = 'male';
 
   constructor() {
     super('MenuScene');
@@ -55,10 +59,19 @@ export class MenuScene extends Phaser.Scene {
           <div>
             <h1>定時サバイバー</h1>
             <p>若手社員として、資金調達前のピッチ文化に巻き込まれながら定時まで生き延びる。</p>
-            <p>移動はWASDまたは矢印キー。攻撃は自動。レベルアップではビジネス用語スキルを選ぶ。</p>
+            <p>主人公を選んでから始業する。移動はWASDまたは矢印キー。攻撃は自動。</p>
           </div>
-          <button class="primary-button" type="button">始業する</button>
+          <button class="primary-button" type="button" data-start>始業する</button>
         </div>
+
+        <section class="player-select" aria-label="主人公を選択">
+          <h2>主人公を選択</h2>
+          <div class="player-card-grid">
+            ${this.renderPlayerCard('male', '眼鏡の男の子', '真面目そうな新卒タイプ。資料を抱えて走る。')}
+            ${this.renderPlayerCard('female', '眼鏡の女の子', '落ち着いた若手社員タイプ。会議と通知を切り抜ける。')}
+          </div>
+        </section>
+
         <section class="character-section" aria-label="登場キャラクター">
           <h2>登場キャラクター</h2>
           <div class="table-wrap">
@@ -89,8 +102,9 @@ export class MenuScene extends Phaser.Scene {
       </section>
     `;
     document.body.appendChild(this.root);
-    this.root.querySelector('button')?.addEventListener('click', () => this.startGame());
+    this.root.addEventListener('click', (event) => this.handleClick(event));
     this.input.keyboard?.once('keydown-ENTER', () => this.startGame());
+    this.updateSelectedCard();
   }
 
   shutdown(): void {
@@ -98,9 +112,45 @@ export class MenuScene extends Phaser.Scene {
     this.root = undefined;
   }
 
+  private renderPlayerCard(gender: PlayerGender, label: string, description: string): string {
+    const y = gender === 'male' ? 0 : -160;
+    return `
+      <button class="player-card" type="button" data-gender="${gender}">
+        <span class="player-preview" style="background-image: url('${playerSheetUrl}'); background-position: 0px ${y}px;"></span>
+        <strong>${label}</strong>
+        <span>${description}</span>
+      </button>
+    `;
+  }
+
+  private handleClick(event: MouseEvent): void {
+    const target = event.target;
+    if (!(target instanceof Element)) {
+      return;
+    }
+    const genderButton = target.closest<HTMLButtonElement>('[data-gender]');
+    if (genderButton?.dataset.gender === 'male' || genderButton?.dataset.gender === 'female') {
+      this.selectedGender = genderButton.dataset.gender;
+      this.updateSelectedCard();
+      return;
+    }
+
+    if (target.closest('[data-start]')) {
+      this.startGame();
+    }
+  }
+
+  private updateSelectedCard(): void {
+    this.root?.querySelectorAll<HTMLButtonElement>('[data-gender]').forEach((button) => {
+      const selected = button.dataset.gender === this.selectedGender;
+      button.classList.toggle('is-selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+  }
+
   private startGame(): void {
     this.shutdown();
     const debug = new URLSearchParams(window.location.search).has('debug');
-    this.scene.start('GameScene', { debug });
+    this.scene.start('GameScene', { debug, playerGender: this.selectedGender });
   }
 }

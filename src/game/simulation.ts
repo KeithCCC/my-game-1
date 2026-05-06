@@ -255,7 +255,9 @@ function updateXp(state: GameState): void {
     state.level += 1;
     state.xpToNext = xpNeededForLevel(state.level);
     state.pendingChoices = getUpgradeChoices(state);
-    state.status = 'levelUp';
+    if (state.pendingChoices.length > 0) {
+      state.status = 'levelUp';
+    }
   }
 }
 

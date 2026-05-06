@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import characterSheetUrl from '../../assets/all-character.png';
+import playerSheetUrl from '../../assets/player-characters.png';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -8,6 +9,7 @@ export class BootScene extends Phaser.Scene {
 
   preload(): void {
     this.load.image('officeCharacters', characterSheetUrl);
+    this.load.image('playerCharacters', playerSheetUrl);
   }
 
   create(): void {
@@ -27,6 +29,25 @@ export class BootScene extends Phaser.Scene {
             0,
             startX + col * (frameWidth + gapX),
             startY + row * (frameHeight + gapY),
+            frameWidth,
+            frameHeight,
+          );
+        }
+      }
+    }
+    const playerTexture = this.textures.get('playerCharacters');
+    if (!playerTexture.has('male-0')) {
+      const frameWidth = 160;
+      const frameHeight = 160;
+      for (let row = 0; row < 4; row += 1) {
+        for (let col = 0; col < 5; col += 1) {
+          const gender = row < 2 ? 'male' : 'female';
+          const pose = (row % 2) * 5 + col;
+          playerTexture.add(
+            `${gender}-${pose}`,
+            0,
+            col * frameWidth,
+            row * frameHeight,
             frameWidth,
             frameHeight,
           );
