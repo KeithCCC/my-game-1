@@ -2,9 +2,13 @@
   "name": "startup-survivor",
   "version": "1.0.0",
   "private": true,
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
+    "electron:dev": "concurrently -k \"npm run dev -- --port 5174 --strictPort\" \"wait-on http://127.0.0.1:5174 && electron .\"",
+    "electron:pack": "npm run build && electron-builder --win dir",
+    "electron:build": "npm run build && electron-builder --win nsis",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node ./node_modules/jest/bin/jest.js",
     "test:watch": "node ./node_modules/jest/bin/jest.js --watch"
@@ -14,10 +18,42 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "concurrently": "^9.2.1",
+    "electron": "^42.0.1",
+    "electron-builder": "^26.8.1",
     "jest": "^30.2.0",
     "jest-util": "^30.3.0",
     "ts-jest": "^29.4.6",
     "typescript": "~5.9.2",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "wait-on": "^9.0.5"
+  },
+  "build": {
+    "appId": "com.local.startup-survivor",
+    "productName": "Startup Survivor",
+    "icon": "build/icon.ico",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "assets/icon.png",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "electron/main.cjs"
+    },
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        "nsis",
+        "dir"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
