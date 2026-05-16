@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-05-16 16:40 +09:00 - Missile Command mobile firing
+
+- Branch: `master`
+- Summary: Added mobile-specific Missile Command controls so tapping aims and fires without requiring keyboard base selection.
+- Changed areas: Missile Command mobile detection, tap-to-fire handling, automatic nearest-base launcher selection, mobile help text, and short duplicate-tap firing guard.
+- Validation: Ran `npm test -- __tests__/games/missile-command.test.ts`, `npm run build`, and a mobile-width browser smoke check that confirmed tap firing updates ammo.
+- Known risks/follow-ups: Mobile mode is detected by viewport width or coarse pointer, so small desktop windows can intentionally use the mobile firing path.
+
 ## 2026-05-16 13:38 +09:00 - Missile Command game selector
 
 - Branch: `master`

@@ -155,7 +155,7 @@ function startMissileCommand(): void {
         <button class="missile-control-button" type="button" data-pause>Pause</button>
         <button class="missile-control-button" type="button" data-menu>Main Menu</button>
       </div>
-      <div class="missile-help">Move mouse to aim. A / S / D: fire from left / center / right base</div>
+      <div class="missile-help" data-help>Move mouse to aim. A / S / D: fire from left / center / right base</div>
       <div class="missile-pause-banner" data-paused hidden>Paused</div>
       <div class="missile-result" data-result hidden>
         <h1>Game Over</h1>
@@ -178,16 +178,22 @@ function startMissileCommand(): void {
   const pauseButton = root.querySelector<HTMLButtonElement>('[data-pause]');
   const menuButton = root.querySelector<HTMLButtonElement>('[data-menu]');
   const pausedBanner = root.querySelector<HTMLElement>('[data-paused]');
+  const helpText = root.querySelector<HTMLElement>('[data-help]');
 
   if (!canvas || !context) {
     return;
   }
 
   let state = createMissileCommandState({ width: 900, height: 600 });
+  let isMobile = isMobileMissileCommandMode();
   let animationId = 0;
   let lastFrame = performance.now();
   let isPaused = false;
+  let lastTouchFireAt = 0;
   let pointer = { x: 450, y: 210 };
+  if (helpText && isMobile) {
+    helpText.textContent = 'Tap to aim and fire. The best base is selected automatically.';
+  }
 
   const resize = (): void => {
     const rect = canvas.getBoundingClientRect();
@@ -196,6 +202,12 @@ function startMissileCommand(): void {
     canvas.height = Math.max(1, Math.floor(rect.height * scale));
     context.setTransform(scale, 0, 0, scale, 0, 0);
     resizeMissileCommandState(state, rect.width, rect.height);
+    isMobile = isMobileMissileCommandMode();
+    if (helpText) {
+      helpText.textContent = isMobile
+        ? 'Tap to aim and fire. The best base is selected automatically.'
+        : 'Move mouse to aim. A / S / D: fire from left / center / right base';
+    }
   };
 
   const resizeMissileCommandState = (currentState: MissileCommandState, width: number, height: number): void => {
@@ -229,6 +241,27 @@ function startMissileCommand(): void {
       x: event.clientX - rect.left,
       y: event.clientY - rect.top,
     });
+  };
+
+  const pointerdown = (event: PointerEvent): void => {
+    if (!isMobile || isPaused || state.status !== 'playing') {
+      return;
+    }
+    event.preventDefault();
+    const now = performance.now();
+    if (now - lastTouchFireAt < 180) {
+      return;
+    }
+    lastTouchFireAt = now;
+    const rect = canvas.getBoundingClientRect();
+    pointer = clampAimPoint(state, {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    });
+    const launcher = chooseMobileLauncher(state, pointer);
+    if (launcher) {
+      firePlayerMissile(state, launcher.key, pointer);
+    }
   };
 
   const keydown = (event: KeyboardEvent): void => {
@@ -281,6 +314,7 @@ function startMissileCommand(): void {
   pauseButton?.addEventListener('click', toggleMissilePause);
   menuButton?.addEventListener('click', showLanding);
   canvas.addEventListener('pointermove', pointermove);
+  canvas.addEventListener('pointerdown', pointerdown);
   window.addEventListener('resize', resize);
   window.addEventListener('keydown', keydown);
   resize();
@@ -290,11 +324,32 @@ function startMissileCommand(): void {
     cleanup: () => {
       cancelAnimationFrame(animationId);
       canvas.removeEventListener('pointermove', pointermove);
+      canvas.removeEventListener('pointerdown', pointerdown);
       window.removeEventListener('resize', resize);
       window.removeEventListener('keydown', keydown);
       root.remove();
     },
   };
+}
+
+function isMobileMissileCommandMode(): boolean {
+  return (
+    window.matchMedia('(max-width: 720px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches
+  );
+}
+
+function chooseMobileLauncher(
+  state: MissileCommandState,
+  target: { x: number; y: number },
+): MissileCommandState['launchers'][number] | undefined {
+  return state.launchers
+    .filter((launcher) => launcher.alive && launcher.ammo > 0)
+    .map((launcher) => ({
+      launcher,
+      distance: Math.abs(launcher.position.x - target.x),
+    }))
+    .sort((a, b) => a.distance - b.distance)[0]?.launcher;
 }
 
 function clampAimPoint(state: MissileCommandState, point: { x: number; y: number }): { x: number; y: number } {
