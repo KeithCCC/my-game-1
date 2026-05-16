@@ -22,6 +22,10 @@ body,
   overflow: hidden;
 }
 
+#app {
+  position: relative;
+}
+
 button {
   font: inherit;
 }
@@ -34,6 +38,410 @@ canvas {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 100;
+}
+
+.landing-screen {
+  min-height: 100%;
+  overflow: auto;
+  color: #f7fbf1;
+  background:
+    linear-gradient(90deg, rgba(11, 20, 19, 0.58) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(11, 20, 19, 0.58) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 20% 16%, rgba(255, 204, 92, 0.2), transparent 30%),
+    radial-gradient(circle at 80% 14%, rgba(91, 211, 255, 0.18), transparent 28%),
+    linear-gradient(135deg, #17211f 0%, #263d36 52%, #111817 100%);
+  background-size: 46px 46px, 46px 46px, auto, auto, auto;
+}
+
+.landing-hero {
+  width: min(1180px, 100%);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: clamp(28px, 6vw, 72px) 24px;
+  display: grid;
+  align-content: center;
+  gap: 28px;
+}
+
+.landing-copy {
+  max-width: 780px;
+}
+
+.landing-copy h1 {
+  margin: 0 0 12px;
+  font-size: clamp(44px, 8vw, 92px);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.landing-copy p {
+  max-width: 620px;
+  margin: 0;
+  color: #dce8d4;
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.8;
+}
+
+.game-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.game-card {
+  min-height: 360px;
+  display: grid;
+  grid-template-rows: minmax(190px, 1fr) auto;
+  gap: 20px;
+  padding: clamp(18px, 3vw, 28px);
+  border: 1px solid rgba(247, 251, 241, 0.2);
+  border-radius: 8px;
+  background: rgba(20, 31, 29, 0.84);
+  color: #f7fbf1;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.game-card:hover,
+.game-card:focus-visible {
+  border-color: #ffcc5c;
+  outline: none;
+  transform: translateY(-2px);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+}
+
+.missile-card:hover,
+.missile-card:focus-visible {
+  border-color: #46ff6f;
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(70, 255, 111, 0.16);
+}
+
+.game-card-art {
+  position: relative;
+  min-height: 190px;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(247, 251, 241, 0.07) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(247, 251, 241, 0.07) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, rgba(155, 232, 121, 0.13), rgba(18, 28, 26, 0.82));
+  background-size: 26px 26px, 26px 26px, auto;
+  overflow: hidden;
+}
+
+.pixel-player,
+.pixel-enemy,
+.pixel-beam,
+.missile-city,
+.missile-trail,
+.missile-blast {
+  position: absolute;
+  display: block;
+}
+
+.pixel-player {
+  left: 46%;
+  top: 48%;
+  width: 46px;
+  height: 58px;
+  border-radius: 16px 16px 10px 10px;
+  background: #f7fbf1;
+  box-shadow:
+    0 14px 0 #5bd3ff,
+    -12px 26px 0 -5px #f7fbf1,
+    12px 26px 0 -5px #f7fbf1;
+}
+
+.pixel-enemy {
+  width: 54px;
+  height: 38px;
+  border-radius: 8px;
+  background: #ff6b6b;
+}
+
+.pixel-enemy::before,
+.pixel-enemy::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #17211f;
+}
+
+.pixel-enemy::before {
+  left: 13px;
+}
+
+.pixel-enemy::after {
+  right: 13px;
+}
+
+.pixel-enemy.one {
+  left: 14%;
+  top: 22%;
+}
+
+.pixel-enemy.two {
+  right: 14%;
+  bottom: 20%;
+  background: #ffcc5c;
+}
+
+.pixel-beam {
+  left: 54%;
+  top: 46%;
+  width: 120px;
+  height: 8px;
+  border-radius: 999px;
+  background: #9be879;
+  transform: rotate(-18deg);
+  box-shadow: 0 0 24px rgba(155, 232, 121, 0.8);
+}
+
+.missile-art {
+  background:
+    linear-gradient(90deg, rgba(70, 255, 111, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(70, 255, 111, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #050807, #102018);
+  background-size: 24px 24px, 24px 24px, auto;
+}
+
+.missile-city {
+  bottom: 22px;
+  width: 54px;
+  height: 24px;
+  background: #46ff6f;
+  box-shadow:
+    10px -13px 0 -5px #46ff6f,
+    24px -8px 0 -4px #46ff6f;
+}
+
+.missile-city.one {
+  left: 14%;
+}
+
+.missile-city.two {
+  left: 43%;
+}
+
+.missile-city.three {
+  right: 13%;
+}
+
+.missile-trail {
+  width: 124px;
+  height: 2px;
+  transform-origin: left center;
+}
+
+.missile-trail.enemy {
+  left: 25%;
+  top: 18%;
+  background: #ff5d5d;
+  transform: rotate(42deg);
+  box-shadow: 0 0 14px rgba(255, 93, 93, 0.74);
+}
+
+.missile-trail.defender {
+  left: 50%;
+  bottom: 30%;
+  background: #64d8ff;
+  transform: rotate(-44deg);
+  box-shadow: 0 0 14px rgba(100, 216, 255, 0.74);
+}
+
+.missile-blast {
+  left: 52%;
+  top: 36%;
+  width: 62px;
+  height: 62px;
+  border: 3px solid #f5e86b;
+  border-radius: 50%;
+  box-shadow:
+    0 0 18px rgba(245, 232, 107, 0.8),
+    inset 0 0 18px rgba(245, 232, 107, 0.34);
+}
+
+.game-card-body {
+  display: grid;
+  gap: 10px;
+}
+
+.game-card-body strong {
+  font-size: clamp(26px, 4vw, 42px);
+  line-height: 1;
+}
+
+.game-card-body span {
+  color: #c8d7c8;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.game-back-button {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  pointer-events: auto;
+  padding: 10px 14px;
+  border: 1px solid rgba(247, 251, 241, 0.24);
+  border-radius: 8px;
+  background: rgba(17, 24, 23, 0.82);
+  color: #f7fbf1;
+  font-weight: 800;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.game-back-button:hover,
+.game-back-button:focus-visible {
+  border-color: #ffcc5c;
+  outline: none;
+  background: #263d36;
+}
+
+.missile-command-game {
+  width: 100%;
+  height: 100%;
+  color: #f7fbf1;
+  background: #050807;
+}
+
+.missile-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #050807;
+}
+
+.missile-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.missile-hud {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index: 4;
+  display: flex;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.missile-hud div {
+  min-width: 96px;
+  padding: 10px 12px;
+  border: 1px solid rgba(70, 255, 111, 0.28);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.78);
+  box-shadow: 0 0 24px rgba(70, 255, 111, 0.12);
+}
+
+.missile-hud span {
+  display: block;
+  color: #96f7a8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.missile-hud strong {
+  display: block;
+  margin-top: 2px;
+  color: #f7fbf1;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.missile-controls {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.missile-control-button {
+  min-width: 96px;
+  padding: 10px 12px;
+  border: 1px solid rgba(70, 255, 111, 0.28);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.82);
+  color: #f7fbf1;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 24px rgba(70, 255, 111, 0.12);
+}
+
+.missile-control-button:hover,
+.missile-control-button:focus-visible {
+  border-color: #f5e86b;
+  outline: none;
+  background: rgba(19, 32, 24, 0.9);
+}
+
+.missile-help {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+  color: rgba(247, 251, 241, 0.68);
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.missile-pause-banner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 7;
+  transform: translate(-50%, -50%);
+  padding: 16px 24px;
+  border: 1px solid rgba(245, 232, 107, 0.42);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.88);
+  color: #f5e86b;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0;
+  box-shadow: 0 0 48px rgba(245, 232, 107, 0.18);
+}
+
+.missile-result {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 8;
+  width: min(420px, calc(100% - 36px));
+  transform: translate(-50%, -50%);
+  padding: 26px;
+  border: 1px solid rgba(70, 255, 111, 0.3);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.9);
+  text-align: center;
+  box-shadow: 0 0 60px rgba(70, 255, 111, 0.16);
+}
+
+.missile-result h1 {
+  margin: 0 0 10px;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.missile-result p {
+  margin: 0 0 18px;
+  color: #dce8d4;
+  line-height: 1.7;
 }
 
 .hud {
@@ -476,6 +884,61 @@ canvas {
 }
 
 @media (max-width: 720px) {
+  .landing-hero {
+    align-content: start;
+    padding: 26px 16px;
+  }
+
+  .game-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-card {
+    min-height: 300px;
+  }
+
+  .game-back-button {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .missile-hud {
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .missile-hud div {
+    min-width: 0;
+    padding: 8px;
+  }
+
+  .missile-hud strong {
+    font-size: 20px;
+  }
+
+  .missile-controls {
+    top: auto;
+    right: 10px;
+    bottom: 44px;
+    flex-direction: column;
+  }
+
+  .missile-control-button {
+    min-width: 72px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .missile-help {
+    left: 10px;
+    right: 82px;
+    bottom: 14px;
+  }
+
   .hud {
     padding: 10px;
   }
