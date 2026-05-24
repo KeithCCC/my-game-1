@@ -12,6 +12,18 @@ import {
   type LauncherKey,
   type MissileCommandState,
 } from './games/missile-command';
+import {
+  createSokobanState,
+  getSokobanLevelCount,
+  getSokobanTile,
+  moveSokoban,
+  nextSokobanLevel,
+  resetSokobanLevel,
+  undoSokobanMove,
+  type SokobanDirection,
+  type SokobanState,
+  type SokobanTile,
+} from './games/sokoban';
 
 type MountedGameState = {
   cleanup: () => void;
@@ -52,7 +64,7 @@ function clearCurrentGame(): void {
 
   gameRoot?.replaceChildren();
   hudRoot?.replaceChildren();
-  document.body.classList.remove('is-playing-page-survivor', 'is-playing-missile-command');
+  document.body.classList.remove('is-playing-page-survivor', 'is-playing-missile-command', 'is-playing-sokoban');
 }
 
 function createBackButton(): HTMLButtonElement {
@@ -77,7 +89,7 @@ function showLanding(): void {
     <section class="landing-hero" aria-labelledby="landing-title">
       <div class="landing-copy">
         <h1 id="landing-title">Choose a game</h1>
-        <p>Launch Page Survivor or Missile Command from this selector.</p>
+        <p>Launch Page Survivor, Missile Command, or Sokoban from this selector.</p>
       </div>
       <div class="game-card-grid" aria-label="Game selection">
         <button class="game-card survivor-card" type="button" data-game="page-survivor">
@@ -106,6 +118,22 @@ function showLanding(): void {
             <span>Use A / S / D to fire from the left, center, and right bases in a classic city-defense game.</span>
           </span>
         </button>
+        <button class="game-card sokoban-card" type="button" data-game="sokoban">
+          <span class="game-card-art sokoban-art" aria-hidden="true">
+            <span class="sokoban-wall one"></span>
+            <span class="sokoban-wall two"></span>
+            <span class="sokoban-wall three"></span>
+            <span class="sokoban-goal one"></span>
+            <span class="sokoban-goal two"></span>
+            <span class="sokoban-box one"></span>
+            <span class="sokoban-box two"></span>
+            <span class="sokoban-player"></span>
+          </span>
+          <span class="game-card-body">
+            <strong>Sokoban</strong>
+            <span>Push crates onto every goal across 22 compact neon warehouse puzzles.</span>
+          </span>
+        </button>
       </div>
     </section>
   `;
@@ -121,6 +149,9 @@ function showLanding(): void {
     }
     if (button?.dataset.game === 'missile-command') {
       startMissileCommand();
+    }
+    if (button?.dataset.game === 'sokoban') {
+      startSokoban();
     }
   });
 }
@@ -330,6 +361,207 @@ function startMissileCommand(): void {
       root.remove();
     },
   };
+}
+
+function startSokoban(): void {
+  clearCurrentGame();
+
+  if (!gameRoot) {
+    return;
+  }
+
+  document.body.classList.add('is-playing-sokoban');
+  const root = document.createElement('main');
+  root.className = 'sokoban-game';
+  root.innerHTML = `
+    <section class="sokoban-shell" aria-label="Sokoban">
+      <header class="sokoban-topbar">
+        <div>
+          <span>Sokoban</span>
+          <strong data-level>Level 1 / ${getSokobanLevelCount()}</strong>
+        </div>
+        <div>
+          <span>Moves</span>
+          <strong data-moves>0</strong>
+        </div>
+        <nav class="sokoban-actions" aria-label="Sokoban controls">
+          <button class="sokoban-button" type="button" data-action="undo">Undo</button>
+          <button class="sokoban-button" type="button" data-action="reset">Reset</button>
+          <button class="sokoban-button" type="button" data-action="menu">Main Menu</button>
+        </nav>
+      </header>
+      <div class="sokoban-board-wrap">
+        <div class="sokoban-board" data-board role="grid" aria-label="Sokoban board"></div>
+        <div class="sokoban-complete" data-complete hidden>
+          <h1>Level Clear</h1>
+          <p data-complete-text></p>
+          <button class="primary-button" type="button" data-action="next">Next Level</button>
+        </div>
+      </div>
+      <div class="sokoban-help">WASD / Arrow keys move. Z undo. R reset.</div>
+      <div class="sokoban-pad" aria-label="Touch movement controls">
+        <button class="sokoban-pad-button up" type="button" data-move="up">Up</button>
+        <button class="sokoban-pad-button left" type="button" data-move="left">Left</button>
+        <button class="sokoban-pad-button down" type="button" data-move="down">Down</button>
+        <button class="sokoban-pad-button right" type="button" data-move="right">Right</button>
+      </div>
+    </section>
+  `;
+  gameRoot.appendChild(root);
+
+  const board = root.querySelector<HTMLElement>('[data-board]');
+  const levelEl = root.querySelector<HTMLElement>('[data-level]');
+  const movesEl = root.querySelector<HTMLElement>('[data-moves]');
+  const complete = root.querySelector<HTMLElement>('[data-complete]');
+  const completeText = root.querySelector<HTMLElement>('[data-complete-text]');
+  let state = createSokobanState(0);
+
+  const render = (): void => {
+    renderSokoban(root, state, board, levelEl, movesEl, complete, completeText);
+  };
+
+  const tryMove = (direction: SokobanDirection): void => {
+    if (moveSokoban(state, direction)) {
+      render();
+    }
+  };
+
+  const handleAction = (action: string | undefined): void => {
+    if (action === 'undo') {
+      undoSokobanMove(state);
+      render();
+      return;
+    }
+    if (action === 'reset') {
+      resetSokobanLevel(state);
+      render();
+      return;
+    }
+    if (action === 'next') {
+      nextSokobanLevel(state);
+      render();
+      return;
+    }
+    if (action === 'menu') {
+      showLanding();
+    }
+  };
+
+  const click = (event: MouseEvent): void => {
+    const target = event.target;
+    if (!(target instanceof Element)) {
+      return;
+    }
+    const moveButton = target.closest<HTMLButtonElement>('[data-move]');
+    const move = moveButton?.dataset.move;
+    if (isSokobanDirection(move)) {
+      tryMove(move);
+      return;
+    }
+    handleAction(target.closest<HTMLButtonElement>('[data-action]')?.dataset.action);
+  };
+
+  const keydown = (event: KeyboardEvent): void => {
+    const direction = getSokobanDirectionFromKey(event.key);
+    if (direction) {
+      event.preventDefault();
+      tryMove(direction);
+      return;
+    }
+    if (event.key.toLowerCase() === 'z') {
+      event.preventDefault();
+      undoSokobanMove(state);
+      render();
+      return;
+    }
+    if (event.key.toLowerCase() === 'r') {
+      event.preventDefault();
+      resetSokobanLevel(state);
+      render();
+      return;
+    }
+    if (event.key === 'Enter' && state.status === 'complete') {
+      event.preventDefault();
+      nextSokobanLevel(state);
+      render();
+    }
+  };
+
+  root.addEventListener('click', click);
+  window.addEventListener('keydown', keydown);
+  render();
+
+  mountedGameState = {
+    cleanup: () => {
+      root.removeEventListener('click', click);
+      window.removeEventListener('keydown', keydown);
+      root.remove();
+    },
+  };
+}
+
+function renderSokoban(
+  root: HTMLElement,
+  state: SokobanState,
+  board: HTMLElement | null,
+  levelEl: HTMLElement | null,
+  movesEl: HTMLElement | null,
+  complete: HTMLElement | null,
+  completeText: HTMLElement | null,
+): void {
+  if (levelEl) {
+    levelEl.textContent = `Level ${state.levelIndex + 1} / ${getSokobanLevelCount()}`;
+  }
+  if (movesEl) {
+    movesEl.textContent = String(state.moves);
+  }
+  if (complete) {
+    complete.hidden = state.status !== 'complete';
+  }
+  if (completeText) {
+    completeText.textContent = `Solved in ${state.moves} moves.`;
+  }
+  root.querySelector<HTMLButtonElement>('[data-action="undo"]')?.toggleAttribute('disabled', state.history.length === 0);
+
+  if (!board) {
+    return;
+  }
+
+  board.style.setProperty('--sokoban-cols', String(state.width));
+  board.style.setProperty('--sokoban-rows', String(state.height));
+  const cells: string[] = [];
+  for (let y = 0; y < state.height; y += 1) {
+    for (let x = 0; x < state.width; x += 1) {
+      const tile = getSokobanTile(state, x, y);
+      cells.push(
+        `<span class="sokoban-tile ${getSokobanTileClass(tile)}" role="gridcell" aria-label="${getSokobanTileLabel(tile)}"></span>`,
+      );
+    }
+  }
+  board.innerHTML = cells.join('');
+}
+
+function getSokobanDirectionFromKey(key: string): SokobanDirection | undefined {
+  const normalized = key.toLowerCase();
+  if (normalized === 'arrowup' || normalized === 'w') return 'up';
+  if (normalized === 'arrowdown' || normalized === 's') return 'down';
+  if (normalized === 'arrowleft' || normalized === 'a') return 'left';
+  if (normalized === 'arrowright' || normalized === 'd') return 'right';
+  return undefined;
+}
+
+function isSokobanDirection(value: string | undefined): value is SokobanDirection {
+  return value === 'up' || value === 'down' || value === 'left' || value === 'right';
+}
+
+function getSokobanTileClass(tile: SokobanTile): string {
+  return `is-${tile.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
+}
+
+function getSokobanTileLabel(tile: SokobanTile): string {
+  if (tile === 'boxOnGoal') return 'box on goal';
+  if (tile === 'playerOnGoal') return 'player on goal';
+  return tile;
 }
 
 function isMobileMissileCommandMode(): boolean {
