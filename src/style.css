@@ -42,8 +42,9 @@ canvas {
 }
 
 .landing-screen {
-  min-height: 100%;
+  height: 100%;
   overflow: auto;
+  overscroll-behavior: contain;
   color: #f7fbf1;
   background:
     linear-gradient(90deg, rgba(11, 20, 19, 0.58) 0 1px, transparent 1px 100%),
@@ -127,6 +128,14 @@ canvas {
   box-shadow:
     0 28px 80px rgba(0, 0, 0, 0.34),
     0 0 34px rgba(100, 216, 255, 0.16);
+}
+
+.puzzle-card:hover,
+.puzzle-card:focus-visible {
+  border-color: #f5e86b;
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(245, 232, 107, 0.15);
 }
 
 .game-card-art {
@@ -362,6 +371,114 @@ canvas {
   box-shadow:
     0 0 0 6px rgba(100, 216, 255, 0.22),
     0 0 22px rgba(100, 216, 255, 0.72);
+}
+
+.drone-placement-art,
+.factory-line-art,
+.number-merge-art,
+.rotating-pipe-art,
+.three-move-battle-art {
+  display: grid;
+  place-items: center;
+}
+
+.drone-placement-art {
+  background:
+    linear-gradient(90deg, rgba(245, 232, 107, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(245, 232, 107, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #11130a, #202614);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.factory-line-art {
+  background:
+    linear-gradient(90deg, rgba(255, 127, 80, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(255, 127, 80, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #150d09, #2b1c13);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.number-merge-art {
+  background:
+    linear-gradient(90deg, rgba(155, 232, 121, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(155, 232, 121, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #0b1510, #162719);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.rotating-pipe-art {
+  background:
+    linear-gradient(90deg, rgba(100, 216, 255, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(100, 216, 255, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #071014, #122631);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.three-move-battle-art {
+  background:
+    linear-gradient(90deg, rgba(255, 93, 93, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(255, 93, 93, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #150909, #291212);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.super-star-trek-art {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(90deg, rgba(86, 255, 133, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(86, 255, 133, 0.1) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 72% 18%, rgba(245, 232, 107, 0.18), transparent 24%),
+    linear-gradient(160deg, #050807, #11211a 58%, #27190c);
+  background-size: 28px 28px, 28px 28px, auto, auto;
+}
+
+.trek-card-terminal {
+  width: min(230px, 82%);
+  min-height: 136px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid rgba(86, 255, 133, 0.46);
+  border-radius: 7px;
+  background: rgba(2, 7, 5, 0.9);
+  color: #56ff85;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: left;
+  box-shadow:
+    inset 0 0 26px rgba(86, 255, 133, 0.09),
+    0 0 32px rgba(86, 255, 133, 0.18);
+}
+
+.puzzle-art-grid {
+  width: min(180px, 76%);
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.puzzle-art-grid span {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(247, 251, 241, 0.18);
+  border-radius: 6px;
+  background: rgba(247, 251, 241, 0.08);
+  color: #f7fbf1;
+  font-size: 24px;
+  font-weight: 900;
+  box-shadow: inset 0 0 20px rgba(247, 251, 241, 0.05);
+}
+
+.puzzle-art-grid .is-hot {
+  border-color: #f5e86b;
+  color: #17211f;
+  background: #f5e86b;
+  box-shadow: 0 0 26px rgba(245, 232, 107, 0.38);
 }
 
 .game-card-body {
@@ -768,6 +885,670 @@ canvas {
 
 .sokoban-pad-button.right {
   grid-area: right;
+}
+
+.puzzle-game {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  color: #f7fbf1;
+  background:
+    linear-gradient(90deg, rgba(247, 251, 241, 0.06) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(247, 251, 241, 0.06) 0 1px, transparent 1px 100%),
+    linear-gradient(145deg, #070b0a 0%, #16241f 58%, #101817 100%);
+  background-size: 34px 34px, 34px 34px, auto;
+}
+
+.puzzle-shell {
+  width: min(980px, 100%);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 18px;
+  display: grid;
+  grid-auto-rows: auto;
+  gap: 14px;
+  align-content: start;
+}
+
+.puzzle-topbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.puzzle-topbar > div:first-child {
+  grid-column: span 2;
+}
+
+.puzzle-topbar > div,
+.puzzle-toolbar {
+  min-height: 62px;
+  padding: 10px 12px;
+  border: 1px solid rgba(247, 251, 241, 0.18);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.78);
+  box-shadow: 0 0 28px rgba(247, 251, 241, 0.07);
+}
+
+.puzzle-topbar span {
+  display: block;
+  color: #96f7a8;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.puzzle-topbar strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.puzzle-toolbar {
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.puzzle-instructions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(245, 232, 107, 0.28);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.82);
+  box-shadow: 0 0 28px rgba(245, 232, 107, 0.1);
+}
+
+.drone-visual-guide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.drone-visual-guide figure {
+  min-width: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.drone-visual-guide figcaption {
+  color: #dce8d4;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.mini-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(247, 251, 241, 0.16);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.88);
+}
+
+.mini-cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(247, 251, 241, 0.08);
+  color: #f7fbf1;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.mini-cell.build {
+  background:
+    radial-gradient(circle at center, rgba(245, 232, 107, 0.18), transparent 42%),
+    rgba(12, 20, 19, 0.98);
+  color: #f5e86b;
+}
+
+.mini-cell.path {
+  background: rgba(100, 216, 255, 0.18);
+  color: #64d8ff;
+}
+
+.mini-cell.blocked {
+  background: rgba(255, 93, 93, 0.22);
+  color: #ff5d5d;
+}
+
+.mini-cell.drone,
+.mini-cell.heavy {
+  background: #f5e86b;
+  color: #17211f;
+}
+
+.mini-cell.heavy {
+  box-shadow: inset 0 0 0 3px rgba(23, 33, 31, 0.3);
+}
+
+.mini-cell.enemy,
+.mini-cell.hit {
+  background: rgba(255, 93, 93, 0.34);
+  color: #f7fbf1;
+}
+
+.mini-cell.hit {
+  box-shadow:
+    inset 0 0 0 3px rgba(245, 232, 107, 0.45),
+    0 0 20px rgba(245, 232, 107, 0.18);
+}
+
+.mini-cell.base {
+  background: rgba(70, 255, 111, 0.18);
+  color: #46ff6f;
+}
+
+.mini-result-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgba(247, 251, 241, 0.12);
+  border-radius: 8px;
+  color: #dce8d4;
+  font-size: 12px;
+  line-height: 1.35;
+  background: rgba(247, 251, 241, 0.04);
+}
+
+.mini-badge {
+  min-width: 58px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.mini-badge.clear {
+  background: rgba(70, 255, 111, 0.2);
+  color: #46ff6f;
+}
+
+.mini-badge.failed {
+  background: rgba(255, 93, 93, 0.2);
+  color: #ff5d5d;
+}
+
+.puzzle-instructions section {
+  min-width: 0;
+}
+
+.puzzle-instructions h2 {
+  margin: 0 0 8px;
+  color: #f5e86b;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.puzzle-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #dce8d4;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.puzzle-instructions li + li {
+  margin-top: 4px;
+}
+
+.puzzle-button {
+  min-width: 82px;
+  padding: 10px 12px;
+  border: 1px solid rgba(247, 251, 241, 0.22);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.82);
+  color: #f7fbf1;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.puzzle-button:hover,
+.puzzle-button:focus-visible,
+.puzzle-button.is-selected {
+  border-color: #f5e86b;
+  outline: none;
+  background: rgba(245, 232, 107, 0.14);
+}
+
+.puzzle-button:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+
+.drone-help-strip {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid rgba(245, 232, 107, 0.2);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.72);
+  color: #dce8d4;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.drone-help-strip strong {
+  color: #f5e86b;
+}
+
+.drone-play-area {
+  justify-self: center;
+  width: min(820px, 100%);
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.puzzle-grid {
+  justify-self: center;
+  width: min(calc(var(--puzzle-cols) * 74px), calc(100vw - 36px));
+  display: grid;
+  grid-template-columns: repeat(var(--puzzle-cols), minmax(0, 1fr));
+  border: 1px solid rgba(247, 251, 241, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(5, 8, 7, 0.86);
+  box-shadow:
+    0 22px 80px rgba(0, 0, 0, 0.42),
+    0 0 42px rgba(247, 251, 241, 0.09);
+}
+
+.drone-puzzle-game .puzzle-grid {
+  width: min(calc(var(--puzzle-cols) * 64px), calc(100vw - 36px));
+}
+
+.puzzle-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 1px solid rgba(247, 251, 241, 0.08);
+  background: rgba(12, 20, 19, 0.98);
+  color: #f7fbf1;
+  font-weight: 900;
+  font-size: clamp(18px, 4vw, 30px);
+}
+
+button.puzzle-cell {
+  cursor: pointer;
+}
+
+button.puzzle-cell:hover,
+button.puzzle-cell:focus-visible {
+  z-index: 1;
+  border-color: #f5e86b;
+  outline: none;
+}
+
+.puzzle-cell.is-path {
+  background: rgba(100, 216, 255, 0.14);
+  color: #64d8ff;
+}
+
+.puzzle-cell.is-start {
+  background: rgba(100, 216, 255, 0.24);
+  color: #f7fbf1;
+}
+
+.puzzle-cell.is-base {
+  background: rgba(70, 255, 111, 0.18);
+  color: #46ff6f;
+}
+
+.puzzle-cell.is-covered {
+  box-shadow:
+    inset 0 0 0 3px rgba(245, 232, 107, 0.2),
+    inset 0 0 26px rgba(245, 232, 107, 0.08);
+}
+
+.puzzle-cell.is-event-cell {
+  z-index: 2;
+  border-color: #f5e86b;
+  box-shadow:
+    inset 0 0 0 3px rgba(245, 232, 107, 0.56),
+    0 0 24px rgba(245, 232, 107, 0.3);
+}
+
+.puzzle-cell.is-placeable {
+  background:
+    radial-gradient(circle at center, rgba(245, 232, 107, 0.11), transparent 36%),
+    rgba(12, 20, 19, 0.98);
+  color: rgba(245, 232, 107, 0.38);
+  font-size: clamp(16px, 3vw, 24px);
+}
+
+button.puzzle-cell.is-placeable:hover,
+button.puzzle-cell.is-placeable:focus-visible {
+  color: #f5e86b;
+  background:
+    radial-gradient(circle at center, rgba(245, 232, 107, 0.2), transparent 42%),
+    rgba(20, 31, 29, 0.98);
+}
+
+.puzzle-cell.is-blocked,
+.puzzle-cell.is-obstacle {
+  background: rgba(255, 93, 93, 0.16);
+  color: #ff5d5d;
+}
+
+.puzzle-cell.has-piece,
+.puzzle-cell.has-player {
+  color: #17211f;
+  background: #f5e86b;
+  box-shadow: inset 0 0 20px rgba(23, 33, 31, 0.18);
+}
+
+.puzzle-cell.has-enemy {
+  color: #f7fbf1;
+  background: rgba(255, 93, 93, 0.34);
+}
+
+.puzzle-cell.is-source,
+.puzzle-cell.is-output,
+.puzzle-cell.is-outlet,
+.puzzle-cell.is-machine {
+  background: rgba(100, 216, 255, 0.18);
+  color: #64d8ff;
+}
+
+.puzzle-cell.is-flowing {
+  box-shadow:
+    inset 0 0 0 3px rgba(70, 255, 111, 0.42),
+    inset 0 0 24px rgba(70, 255, 111, 0.16);
+}
+
+.merge-grid {
+  width: min(420px, calc(100vw - 36px));
+}
+
+.merge-tile {
+  border-radius: 0;
+  background: rgba(247, 251, 241, 0.08);
+  color: #f7fbf1;
+}
+
+.merge-tile:not(.value-0) {
+  background: #f5e86b;
+  color: #17211f;
+}
+
+.merge-pad {
+  justify-self: center;
+  display: grid;
+  grid-template-columns: repeat(3, 74px);
+  grid-template-areas:
+    ". up ."
+    "left down right";
+  gap: 8px;
+}
+
+.merge-pad .up {
+  grid-area: up;
+}
+
+.merge-pad .left {
+  grid-area: left;
+}
+
+.merge-pad .down {
+  grid-area: down;
+}
+
+.merge-pad .right {
+  grid-area: right;
+}
+
+.puzzle-result {
+  justify-self: center;
+  min-width: min(320px, 100%);
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  padding: 16px;
+  border: 1px solid rgba(247, 251, 241, 0.2);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.86);
+  text-align: center;
+}
+
+.puzzle-result strong {
+  color: #f5e86b;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.puzzle-result p {
+  margin: 0;
+  color: #dce8d4;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.puzzle-result.is-failed strong {
+  color: #ff5d5d;
+}
+
+.drone-combat-log {
+  min-width: 0;
+  max-height: 322px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid rgba(100, 216, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(5, 8, 7, 0.78);
+  box-shadow: 0 0 28px rgba(100, 216, 255, 0.08);
+}
+
+.drone-combat-log h2 {
+  margin: 0 0 8px;
+  color: #64d8ff;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.drone-combat-log ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #dce8d4;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.drone-combat-log li + li {
+  margin-top: 5px;
+}
+
+.trek-game {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  color: #d9ffe2;
+  background:
+    linear-gradient(90deg, rgba(86, 255, 133, 0.055) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(86, 255, 133, 0.055) 0 1px, transparent 1px 100%),
+    linear-gradient(145deg, #020705 0%, #09150f 52%, #24170b 100%);
+  background-size: 30px 30px, 30px 30px, auto;
+  font-family: 'Courier New', ui-monospace, monospace;
+}
+
+.trek-shell {
+  width: min(1180px, 100%);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 12px;
+}
+
+.trek-topbar {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.trek-topbar div,
+.trek-screen,
+.trek-side-panel,
+.trek-command-row,
+.trek-command-buttons {
+  border: 1px solid rgba(86, 255, 133, 0.26);
+  border-radius: 7px;
+  background: rgba(2, 7, 5, 0.86);
+  box-shadow:
+    inset 0 0 26px rgba(86, 255, 133, 0.055),
+    0 0 28px rgba(0, 0, 0, 0.34);
+}
+
+.trek-topbar div {
+  min-width: 0;
+  padding: 8px 9px;
+}
+
+.trek-topbar span {
+  display: block;
+  color: #f5e86b;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.trek-topbar strong {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  color: #56ff85;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.trek-console-layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: 12px;
+}
+
+.trek-screen,
+.trek-side-panel {
+  min-height: 0;
+  padding: 14px;
+  overflow: auto;
+}
+
+.trek-title-line {
+  margin-bottom: 10px;
+  color: #f5e86b;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.trek-screen pre,
+.trek-side-panel pre {
+  margin: 0;
+  color: #56ff85;
+  font: 800 14px/1.45 'Courier New', ui-monospace, monospace;
+  white-space: pre-wrap;
+}
+
+.trek-side-panel h2 {
+  margin: 0 0 10px;
+  color: #f5e86b;
+  font-size: 13px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.trek-legend {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  color: #d9ffe2;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.trek-command-row {
+  min-width: 0;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.trek-command-row label {
+  color: #f5e86b;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.trek-command-row input {
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(86, 255, 133, 0.32);
+  border-radius: 6px;
+  outline: none;
+  background: rgba(0, 0, 0, 0.42);
+  color: #56ff85;
+  font: 900 16px 'Courier New', ui-monospace, monospace;
+}
+
+.trek-command-row input:focus {
+  border-color: #f5e86b;
+  box-shadow: 0 0 0 3px rgba(245, 232, 107, 0.14);
+}
+
+.trek-command-buttons {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trek-button,
+.trek-primary-button {
+  min-height: 38px;
+  padding: 9px 12px;
+  border: 1px solid rgba(86, 255, 133, 0.34);
+  border-radius: 6px;
+  background: rgba(5, 16, 10, 0.92);
+  color: #d9ffe2;
+  font: 900 13px 'Courier New', ui-monospace, monospace;
+  cursor: pointer;
+}
+
+.trek-primary-button,
+.trek-button:hover,
+.trek-button:focus-visible,
+.trek-primary-button:hover,
+.trek-primary-button:focus-visible {
+  border-color: #f5e86b;
+  outline: none;
+  background: rgba(245, 232, 107, 0.16);
+  color: #f7fbf1;
 }
 
 .hud {
@@ -1316,6 +2097,92 @@ canvas {
 
   .sokoban-pad {
     grid-template-columns: repeat(3, 64px);
+  }
+
+  .puzzle-shell {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .puzzle-topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .puzzle-topbar > div:first-child {
+    grid-column: auto;
+  }
+
+  .puzzle-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .puzzle-instructions {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .drone-visual-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .puzzle-button {
+    min-width: 0;
+    padding: 9px 8px;
+    font-size: 12px;
+  }
+
+  .drone-help-strip,
+  .drone-play-area {
+    grid-template-columns: 1fr;
+  }
+
+  .puzzle-grid {
+    width: min(calc(var(--puzzle-cols) * 54px), calc(100vw - 20px));
+  }
+
+  .merge-grid {
+    width: min(340px, calc(100vw - 20px));
+  }
+
+  .trek-shell {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .trek-topbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trek-console-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .trek-screen,
+  .trek-side-panel {
+    max-height: none;
+    padding: 12px;
+  }
+
+  .trek-screen pre,
+  .trek-side-panel pre {
+    font-size: 12px;
+  }
+
+  .trek-command-row {
+    grid-template-columns: 1fr;
+  }
+
+  .trek-command-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .trek-button,
+  .trek-primary-button {
+    min-width: 0;
+    padding: 9px 7px;
+    font-size: 12px;
   }
 
   .hud {

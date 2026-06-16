@@ -24,9 +24,37 @@ import {
   type SokobanState,
   type SokobanTile,
 } from './games/sokoban';
+import {
+  mountDronePlacement,
+  mountFactoryLine,
+  mountNumberMerge,
+  mountRotatingPipe,
+  mountThreeMoveBattle,
+} from './puzzle-games-ui';
+import { mountSuperStarTrek } from './super-star-trek-ui';
 
 type MountedGameState = {
   cleanup: () => void;
+};
+
+type GameId =
+  | 'page-survivor'
+  | 'missile-command'
+  | 'sokoban'
+  | 'drone-placement'
+  | 'factory-line'
+  | 'number-merge'
+  | 'rotating-pipe'
+  | 'three-move-battle'
+  | 'super-star-trek';
+
+type GameCard = {
+  id: GameId;
+  className: string;
+  title: string;
+  description: string;
+  art: string;
+  start: () => void;
 };
 
 const appRoot = document.querySelector<HTMLDivElement>('#app');
@@ -53,6 +81,117 @@ const pageSurvivorConfig: Phaser.Types.Core.GameConfig = {
   scene: [BootScene, MenuScene, GameScene, ResultScene],
 };
 
+const GAME_BODY_CLASSES = [
+  'is-playing-page-survivor',
+  'is-playing-missile-command',
+  'is-playing-sokoban',
+  'is-playing-puzzle',
+  'is-playing-trek',
+];
+
+const GAME_CARDS: GameCard[] = [
+  {
+    id: 'page-survivor',
+    className: 'survivor-card',
+    title: 'Page Survivor',
+    description: 'Survive waves of enemies, level up, and strengthen your weapons before time runs out.',
+    art: `
+      <span class="pixel-player"></span>
+      <span class="pixel-enemy one"></span>
+      <span class="pixel-enemy two"></span>
+      <span class="pixel-beam"></span>
+    `,
+    start: startPageSurvivor,
+  },
+  {
+    id: 'missile-command',
+    className: 'missile-card',
+    title: 'Missile Command',
+    description: 'Use A / S / D to fire from the left, center, and right bases in a classic city-defense game.',
+    art: `
+      <span class="missile-city one"></span>
+      <span class="missile-city two"></span>
+      <span class="missile-city three"></span>
+      <span class="missile-trail enemy"></span>
+      <span class="missile-trail defender"></span>
+      <span class="missile-blast"></span>
+    `,
+    start: startMissileCommand,
+  },
+  {
+    id: 'sokoban',
+    className: 'sokoban-card',
+    title: 'Sokoban',
+    description: 'Push crates onto every goal across 22 compact neon warehouse puzzles.',
+    art: `
+      <span class="sokoban-wall one"></span>
+      <span class="sokoban-wall two"></span>
+      <span class="sokoban-wall three"></span>
+      <span class="sokoban-goal one"></span>
+      <span class="sokoban-goal two"></span>
+      <span class="sokoban-box one"></span>
+      <span class="sokoban-box two"></span>
+      <span class="sokoban-player"></span>
+    `,
+    start: startSokoban,
+  },
+  {
+    id: 'drone-placement',
+    className: 'drone-card puzzle-card',
+    title: 'Drone Placement',
+    description: 'Place light and heavy drones around a path, then run the wave before enemies reach the goal.',
+    art: renderPuzzleCardArt('D', 'L', 'H'),
+    start: () => startMountedPuzzle((root) => mountDronePlacement(root, showLanding)),
+  },
+  {
+    id: 'factory-line',
+    className: 'factory-card puzzle-card',
+    title: 'Factory Line',
+    description: 'Place and rotate line tiles so materials pass every machine and reach the output.',
+    art: renderPuzzleCardArt('S', '-', 'L'),
+    start: () => startMountedPuzzle((root) => mountFactoryLine(root, showLanding)),
+  },
+  {
+    id: 'number-merge',
+    className: 'merge-card puzzle-card',
+    title: 'Number Merge',
+    description: 'Slide and combine matching numbers in a compact 2048-style puzzle until you make 128.',
+    art: renderPuzzleCardArt('2', '4', '8'),
+    start: () => startMountedPuzzle((root) => mountNumberMerge(root, showLanding)),
+  },
+  {
+    id: 'rotating-pipe',
+    className: 'pipe-card puzzle-card',
+    title: 'Rotating Pipe',
+    description: 'Rotate fixed pipe pieces to carry water from the source to every outlet.',
+    art: renderPuzzleCardArt('S', '+', 'O'),
+    start: () => startMountedPuzzle((root) => mountRotatingPipe(root, showLanding)),
+  },
+  {
+    id: 'three-move-battle',
+    className: 'battle-card puzzle-card',
+    title: 'Three-Move Battle',
+    description: 'Solve small tactical boards by defeating every enemy in three actions or fewer.',
+    art: renderPuzzleCardArt('P', 'E', '*'),
+    start: () => startMountedPuzzle((root) => mountThreeMoveBattle(root, showLanding)),
+  },
+  {
+    id: 'super-star-trek',
+    className: 'trek-card',
+    title: 'Super Star Trek',
+    description: 'Command the Enterprise with classic text commands, scans, phasers, torpedoes, and shields.',
+    art: `
+      <span class="trek-card-terminal">
+        <span>STARDATE 3421</span>
+        <span>QUAD 4-3 SEC 5-5</span>
+        <span>&gt; SRS</span>
+        <span>&lt;*&gt; . . +++</span>
+      </span>
+    `,
+    start: startSuperStarTrek,
+  },
+];
+
 function clearCurrentGame(): void {
   mountedGameState?.cleanup();
   mountedGameState = undefined;
@@ -62,9 +201,10 @@ function clearCurrentGame(): void {
     phaserGame = undefined;
   }
 
+  document.body.querySelectorAll(':scope > .screen').forEach((screen) => screen.remove());
   gameRoot?.replaceChildren();
   hudRoot?.replaceChildren();
-  document.body.classList.remove('is-playing-page-survivor', 'is-playing-missile-command', 'is-playing-sokoban');
+  document.body.classList.remove(...GAME_BODY_CLASSES);
 }
 
 function createBackButton(): HTMLButtonElement {
@@ -89,51 +229,10 @@ function showLanding(): void {
     <section class="landing-hero" aria-labelledby="landing-title">
       <div class="landing-copy">
         <h1 id="landing-title">Choose a game</h1>
-        <p>Launch Page Survivor, Missile Command, or Sokoban from this selector.</p>
+        <p>Launch arcade, warehouse, and compact puzzle games from this selector.</p>
       </div>
       <div class="game-card-grid" aria-label="Game selection">
-        <button class="game-card survivor-card" type="button" data-game="page-survivor">
-          <span class="game-card-art" aria-hidden="true">
-            <span class="pixel-player"></span>
-            <span class="pixel-enemy one"></span>
-            <span class="pixel-enemy two"></span>
-            <span class="pixel-beam"></span>
-          </span>
-          <span class="game-card-body">
-            <strong>Page Survivor</strong>
-            <span>Survive waves of enemies, level up, and strengthen your weapons before time runs out.</span>
-          </span>
-        </button>
-        <button class="game-card missile-card" type="button" data-game="missile-command">
-          <span class="game-card-art missile-art" aria-hidden="true">
-            <span class="missile-city one"></span>
-            <span class="missile-city two"></span>
-            <span class="missile-city three"></span>
-            <span class="missile-trail enemy"></span>
-            <span class="missile-trail defender"></span>
-            <span class="missile-blast"></span>
-          </span>
-          <span class="game-card-body">
-            <strong>Missile Command</strong>
-            <span>Use A / S / D to fire from the left, center, and right bases in a classic city-defense game.</span>
-          </span>
-        </button>
-        <button class="game-card sokoban-card" type="button" data-game="sokoban">
-          <span class="game-card-art sokoban-art" aria-hidden="true">
-            <span class="sokoban-wall one"></span>
-            <span class="sokoban-wall two"></span>
-            <span class="sokoban-wall three"></span>
-            <span class="sokoban-goal one"></span>
-            <span class="sokoban-goal two"></span>
-            <span class="sokoban-box one"></span>
-            <span class="sokoban-box two"></span>
-            <span class="sokoban-player"></span>
-          </span>
-          <span class="game-card-body">
-            <strong>Sokoban</strong>
-            <span>Push crates onto every goal across 22 compact neon warehouse puzzles.</span>
-          </span>
-        </button>
+        ${GAME_CARDS.map(renderGameCard).join('')}
       </div>
     </section>
   `;
@@ -143,17 +242,49 @@ function showLanding(): void {
     if (!(target instanceof Element)) {
       return;
     }
-    const button = target.closest<HTMLButtonElement>('[data-game]');
-    if (button?.dataset.game === 'page-survivor') {
-      startPageSurvivor();
-    }
-    if (button?.dataset.game === 'missile-command') {
-      startMissileCommand();
-    }
-    if (button?.dataset.game === 'sokoban') {
-      startSokoban();
-    }
+    const gameId = target.closest<HTMLButtonElement>('[data-game]')?.dataset.game;
+    GAME_CARDS.find((card) => card.id === gameId)?.start();
   });
+}
+
+function renderGameCard(card: GameCard): string {
+  return `
+    <button class="game-card ${card.className}" type="button" data-game="${card.id}">
+      <span class="game-card-art ${card.id}-art" aria-hidden="true">${card.art}</span>
+      <span class="game-card-body">
+        <strong>${card.title}</strong>
+        <span>${card.description}</span>
+      </span>
+    </button>
+  `;
+}
+
+function renderPuzzleCardArt(first: string, second: string, third: string): string {
+  return `
+    <span class="puzzle-art-grid">
+      <span>${first}</span><span></span><span>${second}</span>
+      <span></span><span class="is-hot">${third}</span><span></span>
+      <span>${second}</span><span></span><span>${first}</span>
+    </span>
+  `;
+}
+
+function startMountedPuzzle(mount: (root: HTMLElement) => MountedGameState): void {
+  clearCurrentGame();
+  if (!gameRoot) {
+    return;
+  }
+  document.body.classList.add('is-playing-puzzle');
+  mountedGameState = mount(gameRoot);
+}
+
+function startSuperStarTrek(): void {
+  clearCurrentGame();
+  if (!gameRoot) {
+    return;
+  }
+  document.body.classList.add('is-playing-trek');
+  mountedGameState = mountSuperStarTrek(gameRoot, showLanding);
 }
 
 function startPageSurvivor(): void {

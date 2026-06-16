@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-06-17 00:09 +09:00 - Puzzle collection and Super Star Trek
+
+- Branch: `codex/add-puzzle-games`
+- Summary: Expanded the selector with five compact puzzle games and a classic text-based Super Star Trek game.
+- Changed areas: Game selector card model, shared DOM puzzle UI, drone/factory/merge/pipe/battle simulations, Super Star Trek simulation and terminal UI, responsive game styling, prompt source docs, and Page Survivor cleanup when returning to the selector.
+- Validation: Ran `npm test -- --runInBand` with 11 suites and 57 tests passing, ran `npm run build`, and browser-smoked Super Star Trek launch/commands/helper buttons plus Page Survivor-to-selector cleanup.
+- Known risks/follow-ups: Vite still reports the existing large bundled JS chunk warning; several puzzle games may still need playtest-driven UX polish.
+
 ## 2026-05-16 16:40 +09:00 - Missile Command mobile firing
 
 - Branch: `master`
