@@ -26,6 +26,14 @@ body,
   position: relative;
 }
 
+body.is-landing,
+body.is-landing #app,
+body.is-landing #game {
+  min-height: 100%;
+  height: auto;
+  overflow: auto;
+}
+
 button {
   font: inherit;
 }
@@ -42,9 +50,10 @@ canvas {
 }
 
 .landing-screen {
-  height: 100%;
-  overflow: auto;
+  min-height: 100dvh;
+  overflow: visible;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   color: #f7fbf1;
   background:
     linear-gradient(90deg, rgba(11, 20, 19, 0.58) 0 1px, transparent 1px 100%),

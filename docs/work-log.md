@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-06-18 07:01 +09:00 - Mobile landing scroll
+
+- Branch: `codex/add-puzzle-games`
+- Summary: Made the game selector landing page scroll reliably in mobile browser viewports.
+- Changed areas: Landing body state, app/game scroll behavior, mobile-safe landing min-height, and touch scrolling.
+- Validation: Ran `npm test -- --runInBand`, `npm run build`, and browser-checked a 390x844 viewport scrolling to the final game card plus launch/return class transitions.
+- Known risks/follow-ups: Vite still reports the existing large bundled JS chunk warning.
+
 ## 2026-06-17 00:09 +09:00 - Puzzle collection and Super Star Trek
 
 - Branch: `codex/add-puzzle-games`

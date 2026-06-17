@@ -82,6 +82,7 @@ const pageSurvivorConfig: Phaser.Types.Core.GameConfig = {
 };
 
 const GAME_BODY_CLASSES = [
+  'is-landing',
   'is-playing-page-survivor',
   'is-playing-missile-command',
   'is-playing-sokoban',
@@ -222,6 +223,7 @@ function showLanding(): void {
   if (!appRoot || !gameRoot) {
     return;
   }
+  document.body.classList.add('is-landing');
 
   const landing = document.createElement('main');
   landing.className = 'landing-screen';
