@@ -4,6 +4,7 @@ import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
 import { MenuScene } from './scenes/MenuScene';
 import { ResultScene } from './scenes/ResultScene';
+import { SpaceFighterScene } from './scenes/SpaceFighterScene';
 import {
   createMissileCommandState,
   firePlayerMissile,
@@ -40,6 +41,7 @@ type MountedGameState = {
 type GameId =
   | 'page-survivor'
   | 'missile-command'
+  | 'space-fighter'
   | 'sokoban'
   | 'drone-placement'
   | 'factory-line'
@@ -81,10 +83,28 @@ const pageSurvivorConfig: Phaser.Types.Core.GameConfig = {
   scene: [BootScene, MenuScene, GameScene, ResultScene],
 };
 
+const spaceFighterConfig: Phaser.Types.Core.GameConfig = {
+  type: Phaser.AUTO,
+  parent: 'game',
+  backgroundColor: '#02040a',
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  },
+  render: {
+    antialias: true,
+    pixelArt: false,
+  },
+  scene: [SpaceFighterScene],
+};
+
 const GAME_BODY_CLASSES = [
   'is-landing',
   'is-playing-page-survivor',
   'is-playing-missile-command',
+  'is-playing-space-fighter',
   'is-playing-sokoban',
   'is-playing-puzzle',
   'is-playing-trek',
@@ -118,6 +138,20 @@ const GAME_CARDS: GameCard[] = [
       <span class="missile-blast"></span>
     `,
     start: startMissileCommand,
+  },
+  {
+    id: 'space-fighter',
+    className: 'space-fighter-card',
+    title: 'Space Fighter',
+    description: 'Start as a ground tank, unlock flight, punch through orbit, and break an alien fleet.',
+    art: `
+      <span class="space-card-stars"></span>
+      <span class="space-card-ground"></span>
+      <span class="space-card-tank"></span>
+      <span class="space-card-ship"></span>
+      <span class="space-card-beam"></span>
+    `,
+    start: startSpaceFighter,
   },
   {
     id: 'sokoban',
@@ -294,6 +328,17 @@ function startPageSurvivor(): void {
   document.body.classList.add('is-playing-page-survivor');
   phaserGame = new Phaser.Game(pageSurvivorConfig);
   hudRoot?.appendChild(createBackButton());
+}
+
+function startSpaceFighter(): void {
+  clearCurrentGame();
+  document.body.classList.add('is-playing-space-fighter');
+  const returnToMenu = (): void => {
+    window.removeEventListener('space-fighter-menu', returnToMenu);
+    showLanding();
+  };
+  window.addEventListener('space-fighter-menu', returnToMenu);
+  phaserGame = new Phaser.Game(spaceFighterConfig);
 }
 
 function startMissileCommand(): void {

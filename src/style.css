@@ -139,6 +139,14 @@ canvas {
     0 0 34px rgba(100, 216, 255, 0.16);
 }
 
+.space-fighter-card:hover,
+.space-fighter-card:focus-visible {
+  border-color: #f5e86b;
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(245, 232, 107, 0.16);
+}
+
 .puzzle-card:hover,
 .puzzle-card:focus-visible {
   border-color: #f5e86b;
@@ -168,7 +176,12 @@ canvas {
 .sokoban-wall,
 .sokoban-goal,
 .sokoban-box,
-.sokoban-player {
+.sokoban-player,
+.space-card-stars,
+.space-card-ground,
+.space-card-tank,
+.space-card-ship,
+.space-card-beam {
   position: absolute;
   display: block;
 }
@@ -380,6 +393,81 @@ canvas {
   box-shadow:
     0 0 0 6px rgba(100, 216, 255, 0.22),
     0 0 22px rgba(100, 216, 255, 0.72);
+}
+
+.space-fighter-art {
+  background:
+    linear-gradient(90deg, rgba(245, 232, 107, 0.08) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(100, 216, 255, 0.08) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #02040a 0%, #102b55 54%, #65333a 100%);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.space-card-stars {
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 24%, #f7fbf1 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 18%, #f5e86b 0 2px, transparent 3px),
+    radial-gradient(circle at 62% 68%, #d8f4ff 0 1px, transparent 2px),
+    radial-gradient(circle at 35% 58%, #f7fbf1 0 1px, transparent 2px),
+    radial-gradient(circle at 88% 48%, #d8f4ff 0 1px, transparent 2px);
+  opacity: 0.8;
+}
+
+.space-card-ground {
+  left: -5%;
+  right: -5%;
+  bottom: 0;
+  height: 34%;
+  background:
+    linear-gradient(180deg, rgba(245, 232, 107, 0.38), transparent 12px),
+    linear-gradient(145deg, #3d2c1b, #1f160f);
+  clip-path: polygon(0 34%, 18% 18%, 32% 42%, 48% 10%, 67% 36%, 82% 20%, 100% 44%, 100% 100%, 0 100%);
+}
+
+.space-card-tank {
+  left: 18%;
+  bottom: 27%;
+  width: 76px;
+  height: 30px;
+  border-radius: 8px;
+  background: #64d8ff;
+  box-shadow:
+    18px -17px 0 -6px #64d8ff,
+    -13px 21px 0 -8px #050807,
+    19px 21px 0 -8px #050807;
+}
+
+.space-card-tank::after {
+  content: "";
+  position: absolute;
+  right: -34px;
+  top: 8px;
+  width: 45px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f5e86b;
+}
+
+.space-card-ship {
+  right: 18%;
+  top: 30%;
+  width: 84px;
+  height: 50px;
+  background: #ff5d5d;
+  clip-path: polygon(0 50%, 78% 0, 100% 50%, 78% 100%);
+  box-shadow: 0 0 24px rgba(255, 93, 93, 0.42);
+}
+
+.space-card-beam {
+  left: 42%;
+  top: 48%;
+  width: 126px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f5e86b;
+  transform: rotate(-16deg);
+  box-shadow: 0 0 18px rgba(245, 232, 107, 0.8);
 }
 
 .drone-placement-art,
@@ -664,6 +752,151 @@ canvas {
   margin: 0 0 18px;
   color: #dce8d4;
   line-height: 1.7;
+}
+
+.space-fighter-hud {
+  position: absolute;
+  inset: 0;
+  padding: 14px;
+  pointer-events: none;
+  color: #f7fbf1;
+}
+
+.space-topbar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(108px, auto));
+  gap: 10px;
+  align-items: start;
+}
+
+.space-topbar section,
+.space-actions button,
+.space-transition,
+.space-result {
+  border: 1px solid rgba(100, 216, 255, 0.26);
+  border-radius: 8px;
+  background: rgba(2, 7, 12, 0.78);
+  box-shadow:
+    inset 0 0 24px rgba(100, 216, 255, 0.06),
+    0 0 28px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(8px);
+}
+
+.space-topbar section {
+  min-width: 0;
+  min-height: 68px;
+  padding: 9px 11px;
+}
+
+.space-topbar span {
+  display: block;
+  color: #f5e86b;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.space-topbar strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.space-topbar small {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  color: #b9d9e7;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.space-meter {
+  height: 7px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(247, 251, 241, 0.12);
+}
+
+.space-meter div {
+  height: 100%;
+  background: #64d8ff;
+}
+
+.space-actions {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.space-actions button,
+.space-result button {
+  min-width: 104px;
+  padding: 10px 12px;
+  color: #f7fbf1;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.space-actions button:hover,
+.space-actions button:focus-visible,
+.space-result button:hover,
+.space-result button:focus-visible {
+  border-color: #f5e86b;
+  outline: none;
+  background: rgba(245, 232, 107, 0.14);
+}
+
+.space-help {
+  position: absolute;
+  left: 14px;
+  bottom: 17px;
+  color: rgba(247, 251, 241, 0.72);
+  font-size: 13px;
+}
+
+.space-transition,
+.space-result {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  width: min(420px, calc(100% - 32px));
+  transform: translate(-50%, -50%);
+  padding: 22px;
+  text-align: center;
+}
+
+.space-transition strong,
+.space-result h1 {
+  margin: 0;
+  color: #f5e86b;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.space-transition span,
+.space-result p {
+  margin: 0;
+  color: #dce8d4;
+  line-height: 1.5;
+}
+
+.space-result {
+  pointer-events: auto;
+}
+
+.space-result button {
+  border-color: rgba(100, 216, 255, 0.34);
+  background: rgba(5, 18, 32, 0.86);
 }
 
 .sokoban-game {
@@ -2059,6 +2292,47 @@ button.puzzle-cell.is-placeable:focus-visible {
     left: 10px;
     right: 82px;
     bottom: 14px;
+  }
+
+  .space-fighter-hud {
+    padding: 10px;
+  }
+
+  .space-topbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .space-topbar section {
+    min-height: 58px;
+    padding: 8px;
+  }
+
+  .space-topbar strong {
+    font-size: 19px;
+  }
+
+  .space-actions {
+    right: 10px;
+    bottom: 42px;
+    flex-direction: column;
+  }
+
+  .space-actions button {
+    min-width: 84px;
+    padding: 8px 9px;
+    font-size: 12px;
+  }
+
+  .space-help {
+    left: 10px;
+    right: 100px;
+    bottom: 12px;
+    font-size: 12px;
+  }
+
+  .space-transition strong,
+  .space-result h1 {
+    font-size: 28px;
   }
 
   .sokoban-game {
