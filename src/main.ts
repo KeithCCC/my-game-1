@@ -5,6 +5,7 @@ import { GameScene } from './scenes/GameScene';
 import { MenuScene } from './scenes/MenuScene';
 import { ResultScene } from './scenes/ResultScene';
 import { SpaceFighterScene } from './scenes/SpaceFighterScene';
+import { MeteorPaintArenaScene } from './scenes/MeteorPaintArenaScene';
 import {
   createMissileCommandState,
   firePlayerMissile,
@@ -33,6 +34,7 @@ import {
   mountThreeMoveBattle,
 } from './puzzle-games-ui';
 import { mountSuperStarTrek } from './super-star-trek-ui';
+import { mountPageSurvivor2 } from './games/page-survivor-2';
 
 type MountedGameState = {
   cleanup: () => void;
@@ -40,8 +42,10 @@ type MountedGameState = {
 
 type GameId =
   | 'page-survivor'
+  | 'page-survivor-2'
   | 'missile-command'
   | 'space-fighter'
+  | 'meteor-paint-arena'
   | 'sokoban'
   | 'drone-placement'
   | 'factory-line'
@@ -100,17 +104,43 @@ const spaceFighterConfig: Phaser.Types.Core.GameConfig = {
   scene: [SpaceFighterScene],
 };
 
+const meteorPaintArenaConfig: Phaser.Types.Core.GameConfig = {
+  type: Phaser.AUTO,
+  parent: 'game',
+  backgroundColor: '#090712',
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  },
+  render: {
+    antialias: true,
+    pixelArt: false,
+  },
+  scene: [MeteorPaintArenaScene],
+};
+
 const GAME_BODY_CLASSES = [
   'is-landing',
   'is-playing-page-survivor',
   'is-playing-missile-command',
   'is-playing-space-fighter',
+  'is-playing-meteor-paint',
   'is-playing-sokoban',
   'is-playing-puzzle',
   'is-playing-trek',
 ];
 
 const GAME_CARDS: GameCard[] = [
+  {
+    id: 'page-survivor-2',
+    className: 'survivor-card astra-launch-card',
+    title: 'Page Survivor 2 — ASTRA',
+    description: '定時サバイバー2。武器を進化させ、5分間の仕事と最後のボス会議を突破。BGM・効果音つき。',
+    art: '<span style="font-size:56px;font-weight:900;letter-spacing:.06em;color:#f0cb80">ASTRA<span style="display:block;font-size:13px;letter-spacing:.28em;color:#82e3bf">PAGE SURVIVOR / 02</span></span>',
+    start: () => startMountedPuzzle((root) => mountPageSurvivor2(root, showLanding)),
+  },
   {
     id: 'page-survivor',
     className: 'survivor-card',
@@ -152,6 +182,22 @@ const GAME_CARDS: GameCard[] = [
       <span class="space-card-beam"></span>
     `,
     start: startSpaceFighter,
+  },
+  {
+    id: 'meteor-paint-arena',
+    className: 'meteor-card',
+    title: 'Meteor Paint Arena',
+    description: 'Dodge meteor storms, collect powerups, and turn the arena into a living splash canvas.',
+    art: `
+      <span class="meteor-card-splash one"></span>
+      <span class="meteor-card-splash two"></span>
+      <span class="meteor-card-splash three"></span>
+      <span class="meteor-card-player"></span>
+      <span class="meteor-card-meteor one"></span>
+      <span class="meteor-card-meteor two"></span>
+      <span class="meteor-card-trail"></span>
+    `,
+    start: startMeteorPaintArena,
   },
   {
     id: 'sokoban',
@@ -267,6 +313,10 @@ function showLanding(): void {
         <h1 id="landing-title">Choose a game</h1>
         <p>Launch arcade, warehouse, and compact puzzle games from this selector.</p>
       </div>
+      <section class="astra-landing-feature" aria-labelledby="astra-feature-title">
+        <div><span class="astra-feature-label">NEW / PAGE SURVIVOR 2</span><h2 id="astra-feature-title">定時サバイバー2 <strong>ASTRA</strong></h2><p>いつものオフィスで、新しい5分間。武器を進化させ、最後のボス会議を突破しよう。</p><span class="astra-feature-details">自動攻撃 ・ 武器進化 ・ ボス戦 ・ BGM＆効果音</span></div>
+        <button class="astra-feature-start" type="button" data-game="page-survivor-2">ASTRA版で遊ぶ <span aria-hidden="true">→</span></button>
+      </section>
       <div class="game-card-grid" aria-label="Game selection">
         ${GAME_CARDS.map(renderGameCard).join('')}
       </div>
@@ -339,6 +389,17 @@ function startSpaceFighter(): void {
   };
   window.addEventListener('space-fighter-menu', returnToMenu);
   phaserGame = new Phaser.Game(spaceFighterConfig);
+}
+
+function startMeteorPaintArena(): void {
+  clearCurrentGame();
+  document.body.classList.add('is-playing-meteor-paint');
+  const returnToMenu = (): void => {
+    window.removeEventListener('meteor-paint-menu', returnToMenu);
+    showLanding();
+  };
+  window.addEventListener('meteor-paint-menu', returnToMenu);
+  phaserGame = new Phaser.Game(meteorPaintArenaConfig);
 }
 
 function startMissileCommand(): void {

@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-09-05 12:55 +09:00 - ASTRA sequel and public release
+
+- Branch: `codex/add-puzzle-games`.
+- Added Page Survivor 2 — ASTRA with existing character assets, a furnished office background, weapon evolution, telegraphed bosses, original synthesized audio, touch input and saved records.
+- Added a prominent LP feature panel and "ASTRA版で遊ぶ" button that opens the sequel directly from the game selector.
+- Included the previously uncommitted Meteor Paint Arena game with explicit user approval.
+- Validation: all 80 tests passed; production build passed; desktop/mobile LP entry and Meteor launch/return passed browser checks without page errors. Earlier sequel checks covered movement, upgrades, audio lifecycle and boss progression.
+- Deployment: use the existing `keithcccs-projects/my-game-1` Vercel project. Local logs, QA output, environment files and Vercel credentials are excluded from Git/deployment.
+- Known advisory: the existing Phaser bundle exceeds Vite's 500 kB warning threshold.
+
 ## 2026-06-18 07:01 +09:00 - Mobile landing scroll
 
 - Branch: `codex/add-puzzle-games`

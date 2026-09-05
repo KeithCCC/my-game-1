@@ -147,6 +147,14 @@ canvas {
     0 0 34px rgba(245, 232, 107, 0.16);
 }
 
+.meteor-card:hover,
+.meteor-card:focus-visible {
+  border-color: #ff4f8b;
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(255, 79, 139, 0.18);
+}
+
 .puzzle-card:hover,
 .puzzle-card:focus-visible {
   border-color: #f5e86b;
@@ -468,6 +476,129 @@ canvas {
   background: #f5e86b;
   transform: rotate(-16deg);
   box-shadow: 0 0 18px rgba(245, 232, 107, 0.8);
+}
+
+.meteor-paint-arena-art {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 100%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 100%),
+    linear-gradient(160deg, #090712, #16182f 52%, #07140f);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+.meteor-card-splash,
+.meteor-card-player,
+.meteor-card-meteor,
+.meteor-card-trail {
+  position: absolute;
+  display: block;
+}
+
+.meteor-card-splash {
+  border-radius: 50%;
+  opacity: 0.72;
+  filter: saturate(1.25);
+}
+
+.meteor-card-splash.one {
+  left: 10%;
+  top: 18%;
+  width: 118px;
+  height: 118px;
+  background: #ff4f8b;
+  box-shadow:
+    0 0 34px rgba(255, 79, 139, 0.42),
+    42px 18px 0 -22px #ff7a3d,
+    70px -10px 0 -30px #ffd166;
+}
+
+.meteor-card-splash.two {
+  right: 14%;
+  top: 26%;
+  width: 96px;
+  height: 96px;
+  background: #35d6ff;
+  box-shadow:
+    0 0 34px rgba(53, 214, 255, 0.42),
+    -30px 44px 0 -18px #26f2c8;
+}
+
+.meteor-card-splash.three {
+  left: 36%;
+  bottom: 14%;
+  width: 138px;
+  height: 138px;
+  background: #7cf75a;
+  box-shadow:
+    0 0 34px rgba(124, 247, 90, 0.34),
+    54px -12px 0 -24px #a985ff;
+}
+
+.meteor-card-player {
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-right: 22px solid transparent;
+  border-bottom: 52px solid #f7fbf1;
+  border-left: 22px solid transparent;
+  transform: translate(-50%, -50%) rotate(28deg);
+  filter: drop-shadow(0 0 18px rgba(247, 251, 241, 0.62));
+}
+
+.meteor-card-player::after {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 28px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #35d6ff;
+}
+
+.meteor-card-meteor {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff7df;
+  box-shadow:
+    0 0 0 9px rgba(255, 209, 102, 0.42),
+    0 0 28px rgba(255, 209, 102, 0.68);
+}
+
+.meteor-card-meteor::before {
+  content: "";
+  position: absolute;
+  right: 26px;
+  top: 15px;
+  width: 86px;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255, 79, 139, 0.8));
+}
+
+.meteor-card-meteor.one {
+  right: 18%;
+  top: 14%;
+  transform: rotate(-30deg);
+}
+
+.meteor-card-meteor.two {
+  left: 20%;
+  bottom: 22%;
+  transform: rotate(34deg);
+}
+
+.meteor-card-trail {
+  left: 38%;
+  top: 53%;
+  width: 136px;
+  height: 22px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 79, 139, 0), #ff4f8b, #35d6ff, #7cf75a);
+  transform: rotate(28deg);
+  filter: blur(1px);
 }
 
 .drone-placement-art,
@@ -897,6 +1028,163 @@ canvas {
 .space-result button {
   border-color: rgba(100, 216, 255, 0.34);
   background: rgba(5, 18, 32, 0.86);
+}
+
+.meteor-hud {
+  position: absolute;
+  inset: 0;
+  padding: 14px;
+  pointer-events: none;
+  color: #f7fbf1;
+}
+
+.meteor-topbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(108px, auto));
+  gap: 10px;
+  align-items: start;
+}
+
+.meteor-topbar section,
+.meteor-actions button,
+.meteor-center {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(7, 6, 18, 0.72);
+  box-shadow:
+    inset 0 0 24px rgba(255, 79, 139, 0.06),
+    0 0 28px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(8px);
+}
+
+.meteor-topbar section {
+  min-height: 68px;
+  padding: 9px 11px;
+}
+
+.meteor-topbar span {
+  display: block;
+  color: #35d6ff;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.meteor-topbar strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.meteor-meter {
+  height: 7px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(247, 251, 241, 0.12);
+}
+
+.meteor-meter div {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4f8b, #ffd166);
+}
+
+.meteor-actions {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.meteor-actions button,
+.meteor-result button {
+  min-width: 104px;
+  padding: 10px 12px;
+  color: #f7fbf1;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.meteor-actions button:hover,
+.meteor-actions button:focus-visible,
+.meteor-result button:hover,
+.meteor-result button:focus-visible {
+  border-color: #ffd166;
+  outline: none;
+  background: rgba(255, 209, 102, 0.14);
+}
+
+.meteor-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.meteor-help {
+  position: absolute;
+  left: 14px;
+  bottom: 17px;
+  color: rgba(247, 251, 241, 0.72);
+  font-size: 13px;
+}
+
+.meteor-status {
+  position: absolute;
+  left: 14px;
+  top: 98px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: rgba(7, 6, 18, 0.72);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.meteor-status.is-shield {
+  border: 1px solid rgba(53, 214, 255, 0.38);
+  color: #35d6ff;
+}
+
+.meteor-status.is-haste {
+  top: 136px;
+  border: 1px solid rgba(124, 247, 90, 0.38);
+  color: #7cf75a;
+}
+
+.meteor-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  width: min(420px, calc(100% - 32px));
+  transform: translate(-50%, -50%);
+  padding: 22px;
+  text-align: center;
+}
+
+.meteor-center strong {
+  color: #ffd166;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.meteor-center span {
+  color: #dce8d4;
+  line-height: 1.5;
+}
+
+.meteor-result {
+  pointer-events: auto;
+}
+
+.meteor-result button {
+  border-color: rgba(255, 79, 139, 0.36);
+  background: rgba(12, 8, 22, 0.86);
 }
 
 .sokoban-game {
@@ -2332,6 +2620,54 @@ button.puzzle-cell.is-placeable:focus-visible {
 
   .space-transition strong,
   .space-result h1 {
+    font-size: 28px;
+  }
+
+  .meteor-hud {
+    padding: 10px;
+  }
+
+  .meteor-topbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .meteor-topbar section {
+    min-height: 58px;
+    padding: 8px;
+  }
+
+  .meteor-topbar strong {
+    font-size: 19px;
+  }
+
+  .meteor-actions {
+    right: 10px;
+    bottom: 42px;
+    flex-direction: column;
+  }
+
+  .meteor-actions button {
+    min-width: 84px;
+    padding: 8px 9px;
+    font-size: 12px;
+  }
+
+  .meteor-help {
+    left: 10px;
+    right: 100px;
+    bottom: 12px;
+    font-size: 12px;
+  }
+
+  .meteor-status {
+    top: 142px;
+  }
+
+  .meteor-status.is-haste {
+    top: 180px;
+  }
+
+  .meteor-center strong {
     font-size: 28px;
   }
 
