@@ -1,5 +1,11 @@
 # Work Log
 
+## 2026-09-05 - Fix LP document scrolling
+
+- Root cause: the game shell kept `html` at `height: 100%` with `overflow: hidden` even though the landing content was taller. Real wheel input left `scrollY` at0 on the production page.
+- Added a synchronized landing class on `html`; the landing document now owns vertical scrolling, with content-sized body/app/game containers. Launching a game restores the original fullscreen overflow rules.
+- Browser regression: real wheel input scrolled900px at desktop1280 and mobile390 widths, reached the final card, and scrolling worked after launching Super Star Trek and returning to the selector. Production build passed.
+
 ## 2026-09-05 12:55 +09:00 - ASTRA sequel and public release
 
 - Branch: `codex/add-puzzle-games`.

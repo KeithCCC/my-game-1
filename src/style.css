@@ -26,12 +26,19 @@ body,
   position: relative;
 }
 
+html.is-landing {
+  min-height: 100%;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 body.is-landing,
 body.is-landing #app,
 body.is-landing #game {
-  min-height: 100%;
+  min-height: 100dvh;
   height: auto;
-  overflow: auto;
+  overflow: visible;
 }
 
 button {

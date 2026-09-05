@@ -286,6 +286,7 @@ function clearCurrentGame(): void {
   gameRoot?.replaceChildren();
   hudRoot?.replaceChildren();
   document.body.classList.remove(...GAME_BODY_CLASSES);
+  document.documentElement.classList.remove('is-landing');
 }
 
 function createBackButton(): HTMLButtonElement {
@@ -304,6 +305,7 @@ function showLanding(): void {
     return;
   }
   document.body.classList.add('is-landing');
+  document.documentElement.classList.add('is-landing');
 
   const landing = document.createElement('main');
   landing.className = 'landing-screen';
