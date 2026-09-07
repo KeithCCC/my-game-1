@@ -1,5 +1,14 @@
 # Work Log
 
+## 2026-09-07 - Missile Command 2 / Nightfall Protocol
+
+- Branch: `codex/add-puzzle-games`.
+- Added an independent Missile Command 2 card beside the original; preserved the original simulation, rendering, and controls for comparison.
+- Added a night skyline, illuminated cities, aiming turrets, distinct threat silhouettes, trails, shockwaves and city destruction effects. New briefing, status display, pause/resume and retry screens support desktop and phone layouts.
+- Enemy waves introduce fast interceptors, three-way splitters with warnings, and weaving drones. Salvos, inter-sector reload breaks, city bonuses and interception chains reward timing and priority choices.
+- Validation: all 86 tests and production build passed. Browser checks at 1280×844 and 390×844 covered both entries, pointer/keyboard firing, pause/resume, return-to-menu scrolling and original-game launch without page errors. Seeded simulated runs exercised all five threat kinds and reached sectors 4–5; these are not human balance evaluations. Independent review's control-instruction finding was fixed.
+- Known advisory: existing Vite bundle-size warning remains. Release uses the existing Vercel project and production alias.
+
 ## 2026-09-05 - Fix LP document scrolling
 
 - Root cause: the game shell kept `html` at `height: 100%` with `overflow: hidden` even though the landing content was taller. Real wheel input left `scrollY` at0 on the production page.

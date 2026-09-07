@@ -35,6 +35,7 @@ import {
 } from './puzzle-games-ui';
 import { mountSuperStarTrek } from './super-star-trek-ui';
 import { mountPageSurvivor2 } from './games/page-survivor-2';
+import { mountMissileCommand2 } from './games/missile-command-2';
 
 type MountedGameState = {
   cleanup: () => void;
@@ -44,6 +45,7 @@ type GameId =
   | 'page-survivor'
   | 'page-survivor-2'
   | 'missile-command'
+  | 'missile-command-2'
   | 'space-fighter'
   | 'meteor-paint-arena'
   | 'sokoban'
@@ -168,6 +170,14 @@ const GAME_CARDS: GameCard[] = [
       <span class="missile-blast"></span>
     `,
     start: startMissileCommand,
+  },
+  {
+    id: 'missile-command-2',
+    className: 'missile-card mc2-launch-card',
+    title: 'Missile Command 2',
+    description: 'Defend a neon night skyline against fast interceptors, splitting warheads, and weaving drones. Compare with the original Missile Command.',
+    art: '<span class="mc2-card-art">MC / 02<small>NIGHTFALL PROTOCOL</small></span>',
+    start: () => startMountedPuzzle((root) => mountMissileCommand2(root, showLanding)),
   },
   {
     id: 'space-fighter',
